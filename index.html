@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Abstimmung</title>
+</head>
+<body>
+  <h1>Welche Aufgaben sollen besprochen werden?</h1>
+  <form id="voteForm">
+    <fieldset>
+      <legend>A1</legend>
+      <label><input type="checkbox" name="vote" value="A1a"> A1a</label><br>
+      <label><input type="checkbox" name="vote" value="A1b"> A1b</label><br>
+      <!-- usw. -->
+    </fieldset>
+    <!-- Weitere Aufgabenfelder ... -->
+    <button type="submit">Abstimmen</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("voteForm");
+    const scriptURL = "DEINE_WEBAPP_URL_HIER"; // z. B. https://script.google.com/macros/s/.../exec
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const selectedVotes = formData.getAll("vote");
+
+      const res = await fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({ votes: selectedVotes }),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (res.ok) {
+        alert("Danke für deine Stimme!");
+        form.reset();
+      } else {
+        alert("Fehler beim Abstimmen.");
+      }
+    });
+  </script>
+</body>
+</html>
